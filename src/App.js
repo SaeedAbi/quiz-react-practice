@@ -4,6 +4,7 @@ import {useEffect, useReducer} from "react";
 import Loader from "./Components/Loader/Loader";
 import Error from "./Components/Error/Error";
 import StartScreen from "./Components/StartScreen";
+import Question from "./Components/Question";
 
 const initialState={
   questions:[],
@@ -14,6 +15,7 @@ function reducer(state,action){
 switch (action.type){
   case'dataReceived': return{...state,questions:action.payload,status:'ready'}
   case "dataFailed": return {...state,status:'error'}
+  case 'start': return {...state,status:'active'}
   default: throw new Error('Action Unknown')
 }
 }
@@ -32,7 +34,8 @@ export default function App(){
     <Main>
       {status === 'loading' && <Loader/>}
       {status === 'error' && <Error/>}
-      {status === 'ready' && <StartScreen numQuestions={numQuestions}/>}
+      {status === 'ready' && <StartScreen numQuestions={numQuestions} dispach={dispach}/>}
+      {status ==='active' && <Question/>}
     </Main>
   </div>
 }
