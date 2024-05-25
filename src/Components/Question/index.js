@@ -1,9 +1,12 @@
 import React from 'react';
+import Option from "./Option";
 
-const Question = () => {
+const Question = ({question}) => {
     return (
         <div>
-            Questions
+            <h4>{question.question}</h4>
+
+           <Option question={question}/>
         </div>
     );
 };
