@@ -5,6 +5,7 @@ import Loader from "./Components/Loader/Loader";
 import Error from "./Components/Error/Error";
 import StartScreen from "./Components/StartScreen";
 import Question from "./Components/Question";
+import NextButton from "./Components/NextButton";
 
 const initialState={
   questions:[],
@@ -22,6 +23,7 @@ switch (action.type){
   case 'newAnswer':
     const question=state.questions.at(state.index)
     return {...state,answer: action.payload, points:action.payload === question.correctOption ? state.points+question.points: state.points, }
+  case 'nextQuestion': return {...state, index:state.index+1,answer:null}
   default: throw new Error('Action Unknown')
 }
 }
@@ -41,7 +43,9 @@ export default function App(){
       {status === 'loading' && <Loader/>}
       {status === 'error' && <Error/>}
       {status === 'ready' && <StartScreen numQuestions={numQuestions} dispatch={dispatch}/>}
-      {status ==='active' && <Question question={questions[index]} dispatch={dispatch} answer={answer}/>}
+      {status ==='active' &&<> <Question question={questions[index]} dispatch={dispatch} answer={answer}/>
+      <NextButton dispatch={dispatch} answer={answer}/> </>
+      }
     </Main>
   </div>
 }
