@@ -28,6 +28,7 @@ switch (action.type){
     return {...state,answer: action.payload, points:action.payload === question.correctOption ? state.points+question.points: state.points, }
   case 'nextQuestion': return {...state, index:state.index+1,answer:null}
   case 'finished': return {...state,status:'finished',highscore:state.points > state.highscore? state.points:state.highscore}
+  case 'restart':return {...initialState,questions:state.questions,status: 'ready'}
   default: throw new Error('Action Unknown')
 }
 }
@@ -53,7 +54,7 @@ export default function App(){
          <Question question={questions[index]} dispatch={dispatch} answer={answer}/>
          <NextButton dispatch={dispatch} answer={answer} numQuestions={numQuestions} index={index}/> </>
       }
-      {status ==='finished' && <FinishedScreen points={points} maxPossiblePoints={maxPossiblePoints} highScore={highscore}/>}
+      {status ==='finished' && <FinishedScreen dispatch={dispatch} points={points} maxPossiblePoints={maxPossiblePoints} highScore={highscore}/>}
     </Main>
   </div>
 }
