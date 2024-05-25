@@ -6,6 +6,7 @@ import Error from "./Components/Error/Error";
 import StartScreen from "./Components/StartScreen";
 import Question from "./Components/Question";
 import NextButton from "./Components/NextButton";
+import Progress from "./Components/Progress";
 
 const initialState={
   questions:[],
@@ -30,9 +31,10 @@ switch (action.type){
 
 export default function App(){
 
-  const [{questions,status,index,answer},dispatch]=useReducer(reducer,initialState)
+  const [{questions,status,index,answer,points},dispatch]=useReducer(reducer,initialState)
 
   const numQuestions=questions.length
+  const maxPossiblePoints=questions.reduce((prev,cur)=>prev+cur.points,0)
 
   useEffect(() => {
    fetch('http://localhost:8000/questions').then(res=>res.json()).then(data=>dispatch({type: "dataReceived",payload:data})).catch(err=>dispatch({type:'dataFailed'}))
@@ -43,8 +45,10 @@ export default function App(){
       {status === 'loading' && <Loader/>}
       {status === 'error' && <Error/>}
       {status === 'ready' && <StartScreen numQuestions={numQuestions} dispatch={dispatch}/>}
-      {status ==='active' &&<> <Question question={questions[index]} dispatch={dispatch} answer={answer}/>
-      <NextButton dispatch={dispatch} answer={answer}/> </>
+      {status ==='active' && <>
+          <Progress index={index} numQuestions={numQuestions} points={points} maxPossiblePoints={maxPossiblePoints} answer={answer}/>
+         <Question question={questions[index]} dispatch={dispatch} answer={answer}/>
+         <NextButton dispatch={dispatch} answer={answer}/> </>
       }
     </Main>
   </div>
